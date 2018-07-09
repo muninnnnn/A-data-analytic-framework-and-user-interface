@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<VTKFile type="UnstructuredGrid" version="0.1" byte_order="LittleEndian">
+  <UnstructuredGrid>
+    <Piece NumberOfPoints="10" NumberOfCells="9">
+      <PointData Scalars="W">
+        <DataArray type="Float32" Name="W" NumberOfComponents="2">
+          0 0 2.4171934759763043 -4.2115283188218822 -1.9075084968479308 -8.0838013636186776 1.0368299378812798 1.481188478226759 0.021499037325597055 8.7502044149078166 -0.93943785208529018 1.378998816455038 1.7323141993153459 -8.1545701445104282 -2.446866598680971 -4.083281018328373 2.7782551402263618 6.5149759953780313 0 0
+        </DataArray>
+        <DataArray type="Float32" Name="u" NumberOfComponents="1">
+          0 0.1111111111111111 0.22222222222222221 0.33333333333333331 0.44444444444444442 0.55555555555555558 0.66666666666666663 0.77777777777777779 0.88888888888888884 1
+        </DataArray>
+      </PointData>
+      <CellData Scalars="P">
+        <DataArray type="Float32" Name="P" NumberOfComponents="1">
+          0.01407425160886394 0.012073216443435977 0.0010703225040257149 0.028108065685828333 -0.044046904011793502 -0.01994983892626127 -0.019137669736902684 -0.00057858157298921185 -0.0079864435270001928
+        </DataArray>
+      </CellData>
+      <Points>
+        <DataArray type="Float32" NumberOfComponents="3" format="ascii">
+          -0.14432258744855997 0.1358168399235849 0
+          -0.066449706931814054 0.21507279199031107 0
+          0.041265823812929571 0.24233452234545041 0
+          0.1254312437595794 0.16979549732424601 0
+          0.22239755322458224 0.11554261777168498 0
+          0.3196292767038556 0.1693183521664087 0
+          0.40526250676111059 0.240118638136394 0
+          0.5122829140625188 0.21024446224255841 0
+          0.58909436574669194 0.12995936983148529 0
+          0.70020638273018854 0.13010652317421934 0
+        </DataArray>
+      </Points>
+      <Cells>
+        <DataArray type="Int32" Name="connectivity" format="ascii">
+          0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 
+        </DataArray>
+        <DataArray type="Int32" Name="offsets" format="ascii">
+          2 4 6 8 10 12 14 16 18 
+        </DataArray>
+        <DataArray type="Int32" Name="types" format="ascii">
+          3 3 3 3 3 3 3 3 3         </DataArray>
+      </Cells>
+    </Piece>
+  </UnstructuredGrid>
+</VTKFile>
