@@ -42,14 +42,14 @@ int main()
 {
 
 	//readTxt("C:\\Users\\munin\\Desktop\\Project\\example_meshpoints_10\\example_meshpoints_10\\worm.pvd");
-	//readTxt("/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu");
+	//readTxt("/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu");
 
 	string filename, line;
 	ifstream file;
-	filename = "/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu";
+	filename = "/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu";
 
-	float a[50][2];
-	float cdnt[10][2];
+	float origin[500][2];
+	float cdnt[128][2];
 	int n = 0;
 	int m;
 
@@ -66,20 +66,20 @@ int main()
 		float first_num, second_num, third_num;
 		sscanf(line.c_str(), "%f %f %d", &first_num, &second_num, &third_num);//格式化提取
 		//cout << first_num << " " << second_num << " " << third_num << endl;
-		a[n][0] = first_num;
-		a[n][1] = second_num;
+		origin[n][0] = first_num;
+		origin[n][1] = second_num;
 		vec_num.push_back(first_num);
 		n++;
 	}
 
 	//cout<< n <<endl;
-	m = 19;
-	for (int i = 0; i < 10; i++)
+	m = 139;
+	for (int i = 0; i < 128; i++)
 	{
 		cdnt[i][0] = a[m + i][0];
 		cdnt[i][1] = a[m + i][1];
 	}
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 128; i++)
 	{
 		cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
 	}

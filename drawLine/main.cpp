@@ -18,7 +18,7 @@ vector<float> vec_num;
 
 int main(int argc, char *argv[])
 {
-
+/*
    string filename, line;
    ifstream file;
        filename = "/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000080.vtu";
@@ -58,17 +58,54 @@ int main(int argc, char *argv[])
        {
            qDebug()<<cdnt[i][0]<< " "<<cdnt[i][1];
        }
+*/
+    string filename, line;
+        ifstream file;
+        filename = "/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu";
 
-       int px[10];
-       int py[10];
-       for (int i = 0; i < 10; i++)
+        float origin[500][2];
+        float cdnt[128][2];
+        int n = 0;
+        int m;
+
+        file.open(filename.data());
+
+        if (!file.is_open())
+        {
+            cout << "Error,no such file\n";
+        }
+
+        while (getline(file, line))
+        {
+
+            float first_num, second_num, third_num;
+            sscanf(line.c_str(), "%f %f %d", &first_num, &second_num, &third_num);//格式化提取
+            //cout << first_num << " " << second_num << " " << third_num << endl;
+            origin[n][0] = first_num;
+            origin[n][1] = second_num;
+            vec_num.push_back(first_num);
+            n++;
+        }
+
+        //cout<< n <<endl;
+        m = 139;
+        for (int i = 0; i < 128; i++)
+        {
+            cdnt[i][0] = origin[m + i][0];
+            cdnt[i][1] = origin[m + i][1];
+        }
+        for (int i = 0; i < 128; i++)
+        {
+             qDebug()<<cdnt[i][0]<< " "<<cdnt[i][1];
+        }
+
+
+       int px[128];
+       int py[128];
+       for (int i = 0; i < 128; i++)
        {
-           px[i] = cdnt[i][0] * 300;
-           py[i] = cdnt[i][1] * 300;
-       }
-       for (int i = 0; i < 10; i++)
-       {
-           qDebug()<<px[i]<< " "<<py[i];
+           px[i] = cdnt[i][0] * 3000;
+           py[i] = cdnt[i][1] * 3000;
        }
 
 
@@ -82,7 +119,7 @@ int main(int argc, char *argv[])
        p.setRenderHint(QPainter::Antialiasing);
        p.setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
 
-       for (int i = 0; i < 9; i++ )
+       for (int i = 0; i < 127; i++ )
        {
           p.drawLine(px[i],py[i],px[i+1],py[i+1]);
 
