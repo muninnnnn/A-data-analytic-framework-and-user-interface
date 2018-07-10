@@ -1,8 +1,10 @@
 # depslib dependency file v1.0
-1531150547 source:/home/cserv1_a/soc_msc/sc17dh/Project/vtuRead/main.cpp
+1531243319 source:/home/cserv1_a/soc_msc/sc17dh/Project/vtuRead/main.cpp
 	<iostream>
 	<fstream>
 	<string>
 	<vector>
 	<cassert>
+	<stdio.h>
+	<cmath>
 

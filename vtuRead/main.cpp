@@ -19,7 +19,7 @@ void readTxt(string file)
 
 	string s;
 
-	while (getline(infile, s))
+	while (getline(infile,s))
 	{
 
 		cout << s << endl;
@@ -43,43 +43,96 @@ int main()
 
 	//readTxt("C:\\Users\\munin\\Desktop\\Project\\example_meshpoints_10\\example_meshpoints_10\\worm.pvd");
 	//readTxt("/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu");
-
+    //readTxt("/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu");
+	/* 128-points
 	string filename, line;
-	ifstream file;
+	ifstream infile;
 	filename = "/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu";
 
-	float origin[500][2];
 	float cdnt[128][2];
 	int n = 0;
-	int m;
 
-	file.open(filename.data());
+	infile.open(filename.data());
 
-	if (!file.is_open())
+	if (!infile.is_open())
 	{
 		cout << "Error,no such file\n";
 	}
 
-	while (getline(file, line))
-	{
+    string s1 = "<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">";
+
+    while(getline(infile,line))
+    {
+	    int location = line.find(s1);
+	    //cout<< location<<endl;
+        if (location > 0)
+            break;
+
+    }
+    while (getline(infile,line))
+    {
+        //cout<<line<<endl;
 
 		float first_num, second_num, third_num;
-		sscanf(line.c_str(), "%f %f %d", &first_num, &second_num, &third_num);//格式化提取
+		sscanf(line.c_str(), "%f %f %d", &first_num, &second_num, &third_num);
 		//cout << first_num << " " << second_num << " " << third_num << endl;
-		origin[n][0] = first_num;
-		origin[n][1] = second_num;
+		cdnt[n][0] = first_num;
+		cdnt[n][1] = second_num;
 		vec_num.push_back(first_num);
 		n++;
+
+		if(n >= 128)
+            break;
 	}
 
-	//cout<< n <<endl;
-	m = 139;
 	for (int i = 0; i < 128; i++)
 	{
-		cdnt[i][0] = origin[m + i][0];
-		cdnt[i][1] = origin[m + i][1];
+		cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
 	}
-	for (int i = 0; i < 128; i++)
+	*/
+
+	// 10-points
+	string filename, line;
+	ifstream infile;
+	filename = "/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu";
+
+	float cdnt[10][2];
+	int n = 0;
+
+	infile.open(filename.data());
+
+	if (!infile.is_open())
+	{
+		cout << "Error,no such file\n";
+	}
+
+    string s1 = "<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">";
+
+    while(getline(infile,line))
+    {
+	    int location = line.find(s1);
+	    //cout<< location<<endl;
+        if (location > 0)
+            break;
+
+    }
+    while (getline(infile,line))
+    {
+        //cout<<line<<endl;
+
+		float first_num, second_num, third_num;
+		sscanf(line.c_str(), "%f %f %d", &first_num, &second_num, &third_num);
+		//cout << first_num << " " << second_num << " " << third_num << endl;
+		cdnt[n][0] = first_num;
+		cdnt[n][1] = second_num;
+		vec_num.push_back(first_num);
+		n++;
+
+		if(n >= 10)
+            break;
+	}
+
+	for (int i = 0; i < 10; i++)
 	{
 		cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
 	}
@@ -87,9 +140,18 @@ int main()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 	return 0;
-
-
 }
 
 
