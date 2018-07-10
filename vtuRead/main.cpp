@@ -27,32 +27,16 @@ void readTxt(string file)
 	infile.close();
 }
 
-float delta = 1e-5;
-int isEqual(float x, float y)
+
+void readCdnt(string file)
 {
-	if ((x - y) > delta && (x-y)<-delta )
-		return 0;
-	else
-		return 1;
-
-}
-
-
-int main()
-{
-
-	//readTxt("C:\\Users\\munin\\Desktop\\Project\\example_meshpoints_10\\example_meshpoints_10\\worm.pvd");
-	//readTxt("/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu");
-    //readTxt("/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu");
-	/* 128-points
-	string filename, line;
+    /* 128-points
+	string line;
 	ifstream infile;
-	filename = "/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu";
-
 	float cdnt[128][2];
 	int n = 0;
 
-	infile.open(filename.data());
+	infile.open(file.data());
 
 	if (!infile.is_open())
 	{
@@ -92,14 +76,12 @@ int main()
 	*/
 
 	// 10-points
-	string filename, line;
+	string line;
 	ifstream infile;
-	filename = "/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu";
-
 	float cdnt[10][2];
 	int n = 0;
 
-	infile.open(filename.data());
+	infile.open(file.data());
 
 	if (!infile.is_open())
 	{
@@ -137,18 +119,42 @@ int main()
 		cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
 	}
 
+}
 
 
 
 
+int main()
+{
+
+	//readTxt("C:\\Users\\munin\\Desktop\\Project\\example_meshpoints_10\\example_meshpoints_10\\worm.pvd");
+	//readTxt("/home/csunix/sc17dh/Project/sampeVTUs/worm_000010.vtu");
+    //readTxt("/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu");
+	//readCdnt("/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu");
+
+	string file,line;
+	ifstream infile;
 
 
+    file = "/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
+	infile.open(file.data());
 
+	if (!infile.is_open())
+	{
+		cout << "Error,no such file\n";
+	}
 
+    string s2 = "file=\"";
 
+    while(getline(infile,line))
+    {
+        int location = line.find(s2);
+        if (location > 0)
+        {
+            cout<<line<<endl;
+        }
 
-
-
+    }
 
 
 	return 0;
