@@ -4,6 +4,9 @@
 #include <QPicture>
 #include <QPainter>
 #include <QDebug>
+#include <QPixmap>
+
+
 
 #include <iostream>
 #include <fstream>
@@ -127,6 +130,7 @@ void readCdnt(string file)
 
 }
 
+
 int main(int argc, char *argv[])
 {
 
@@ -144,24 +148,28 @@ int main(int argc, char *argv[])
        QApplication a(argc, argv);
        QLabel l;
        QPicture pi;
-       QPainter p(&pi);
-
-       //MainWindow w;
+      // QPainter p(&pi);
+       QPixmap pix(500, 500);
+       QPainter p(&pix);
 
        p.setRenderHint(QPainter::Antialiasing);
-       p.setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
+       p.setPen(QPen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap));
+       pix.fill(Qt::transparent);
+
+       p.begin(&pix);
 
        for (int i = 0; i < 9; i++ )
        {
           p.drawLine(px[i],py[i],px[i+1],py[i+1]);
 
        }
+
+       pix.save("a.bmp");
        p.end();
 
 
-       l.setPicture(pi);
-       //w.show();
-       l.show();
+       // l.setPicture(pi);
+       // l.show();
 
 
 
