@@ -76,8 +76,8 @@ int main()
 	m = 139;
 	for (int i = 0; i < 128; i++)
 	{
-		cdnt[i][0] = a[m + i][0];
-		cdnt[i][1] = a[m + i][1];
+		cdnt[i][0] = origin[m + i][0];
+		cdnt[i][1] = origin[m + i][1];
 	}
 	for (int i = 0; i < 128; i++)
 	{
