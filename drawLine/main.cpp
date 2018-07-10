@@ -104,8 +104,8 @@ int main(int argc, char *argv[])
        int py[128];
        for (int i = 0; i < 128; i++)
        {
-           px[i] = cdnt[i][0] * 3000;
-           py[i] = cdnt[i][1] * 3000;
+           px[i] = cdnt[i][0] * 800;
+           py[i] = cdnt[i][1] * 8000;
        }
 
 
