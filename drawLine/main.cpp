@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <cassert>
 #include <stdio.h>
@@ -44,28 +45,22 @@ void readCdnt(string file)
     ifstream infile;
     float cdnt[128][2];
     int n = 0;
-
     infile.open(file.data());
-
     if (!infile.is_open())
     {
         cout << "Error,no such file\n";
     }
-
     string s1 = "<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">";
-
     while(getline(infile,line))
     {
         int location = line.find(s1);
         //cout<< location<<endl;
         if (location > 0)
             break;
-
     }
     while (getline(infile,line))
     {
         //cout<<line<<endl;
-
         float first_num, second_num, third_num;
         sscanf(line.c_str(), "%f %f %d", &first_num, &second_num, &third_num);
         //cout << first_num << " " << second_num << " " << third_num << endl;
@@ -73,11 +68,9 @@ void readCdnt(string file)
         cdnt[n][1] = second_num;
         vec_num.push_back(first_num);
         n++;
-
         if(n >= 128)
             break;
     }
-
     for (int i = 0; i < 128; i++)
     {
         cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
@@ -131,47 +124,50 @@ void readCdnt(string file)
 }
 
 
+void createBmp()
+{
+
+    int px[10];
+    int py[10];
+    for (int i = 0; i < 10; i++)
+    {
+        px[i] = cdnt[i][0] * 500;
+        py[i] = cdnt[i][1] * 500;
+    }
+
+
+    QLabel l;
+    QPicture pi;
+   // QPainter p(&pi);
+    QPixmap pix(500, 500);
+    QPainter p(&pix);
+
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setPen(QPen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap));
+    //pix.fill(Qt::transparent);
+
+    //p.begin(&pix);
+
+    for (int i = 0; i < 9; i++ )
+    {
+       p.drawLine(px[i],py[i],px[i+1],py[i+1]);
+    }
+
+
+    pix.save("a.bmp");
+    p.end();
+    // l.setPicture(pi);
+    // l.show();
+}
+
+
 int main(int argc, char *argv[])
 {
 
-       readCdnt("/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000000.vtu");
-
-       int px[10];
-       int py[10];
-       for (int i = 0; i < 10; i++)
-       {
-           px[i] = cdnt[i][0] * 500;
-           py[i] = cdnt[i][1] * 500;
-       }
-
+       readCdnt("/home/csunix/sc17dh/Project/example_meshpoints_10/worm_000080.vtu");
 
        QApplication a(argc, argv);
-       QLabel l;
-       QPicture pi;
-      // QPainter p(&pi);
-       QPixmap pix(500, 500);
-       QPainter p(&pix);
-
-       p.setRenderHint(QPainter::Antialiasing);
-       p.setPen(QPen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap));
-       pix.fill(Qt::transparent);
-
-       p.begin(&pix);
-
-       for (int i = 0; i < 9; i++ )
-       {
-          p.drawLine(px[i],py[i],px[i+1],py[i+1]);
-
-       }
-
-       pix.save("a.bmp");
-       p.end();
-
-
-       // l.setPicture(pi);
-       // l.show();
-
-
+       createBmp();
 
    return a.exec();
 }
