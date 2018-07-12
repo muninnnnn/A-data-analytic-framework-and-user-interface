@@ -19,13 +19,8 @@
 
 using namespace std;
 vector<float> vec_num;
-
 int fileCounter = 0;
-
-int px[10];
-int py[10];
-float cdnt[10][2];
-
+int global_num = 0;
 
 void readTxt(string file)
 {
@@ -116,16 +111,27 @@ void saveFilename(string file)
 }
 
 
-void readCdnt(string file)
+
+
+
+void createBmp(string file)
 {
     cout<<"The file name is: "<<file<<endl;
     string line;
     ifstream infile;
+
+    ofstream outfile;
+
     stringstream numTrans;
     int numOfPoints;
-    int n = 0;
+    int nn = 0;
+
+
 
     infile.open(file.data());
+
+    //outfile.open("/home/csunix/sc17dh/Project/saveCdnt.txt",ios::app);
+
     if (!infile.is_open())
     {
         cout << "Error,no such file\n";
@@ -142,16 +148,18 @@ void readCdnt(string file)
 
         if(line.find(s1) != string::npos)
         {
+
            int location1 = line.find(s1) + 22;
            int location2 = line.find(s3,location1);
-
            int location = location2 - location1;
 
             numTrans << line.substr(location1,location);
             numTrans >> numOfPoints;
+
             cout<<"location1 is: "<<location1<<endl;
             cout<<"location2 is: "<<location2<<endl;
             cout<<"Number of Points is: "<<numOfPoints<<endl;
+
 
         }
 
@@ -162,8 +170,8 @@ void readCdnt(string file)
     }
 
     cout<<endl;
-    cout<<endl;
-    //float cdnt[numOfPoints][2];
+
+    float cdnt[numOfPoints][2];
 
     //vector<vector<float> >cdnt(fileCounter,vector<float>(2,0));
 
@@ -174,42 +182,33 @@ void readCdnt(string file)
         float first_num, second_num, third_num;
         sscanf(line.c_str(), "%f %f %f", &first_num, &second_num, &third_num);
         //cout << first_num << " " << second_num << " " << third_num << endl;
-        cdnt[n][0] = first_num;
-        cdnt[n][1] = second_num;
+        cdnt[nn][0] = first_num;
+        cdnt[nn][1] = second_num;
         vec_num.push_back(first_num);
-        n++;
+        nn++;
 
-        if(n >= numOfPoints)
+        if(nn >= numOfPoints)
             break;
     }
-/*
+
+    //outfile << "The file name is: "<<file<<endl<<"Number of Points is: "<<numOfPoints<<endl;
+
+
+    int px[numOfPoints];
+    int py[numOfPoints];
+
     for (int i = 0; i < numOfPoints; i++)
     {
-        cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
-    }
-    cout<<endl;
-*/
-
-    for (int i = 0; i < 10; i++)
-    {
+        //outfile << cdnt[i][0] << " " << cdnt[i][1] << endl;
         px[i] = cdnt[i][0] * 500;
         py[i] = cdnt[i][1] * 500;
+
+       // cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
     }
-    infile.close();
-}
 
 
-void createBmp(int num)
-{
-/*
-    int px[10];
-    int py[10];
-    for (int i = 0; i < 10; i++)
-    {
-        px[i] = cdnt[i][0] * 500;
-        py[i] = cdnt[i][1] * 500;
-    }
-*/
+    //outfile << endl;
+    //cout<<endl;
 
     QLabel l;
     QPicture pi;
@@ -225,7 +224,57 @@ void createBmp(int num)
 
     for (int i = 0; i < 9; i++ )
     {
-       p.drawLine(i,i,i+1,i+1);
+       p.drawLine(px[i],py[i],px[i+1],py[i+1]);
+    }
+
+    string bmpName = "wormNo.";
+    string bmpFormat = ".bmp";
+    ostringstream ss;
+
+    ss<<bmpName<<global_num+1<<bmpFormat;
+    global_num++;
+
+    QString qbmpName=QString::fromStdString(ss.str());
+    pix.save(qbmpName);
+    p.end();
+
+    infile.close();
+
+    //outfile.close();
+
+
+
+
+}
+
+/*
+void Bmp(int num)
+{
+
+    int px[10];
+    int py[10];
+    for (int i = 0; i < 10; i++)
+    {
+        px[i] = cdnt[i][0] * 500;
+        py[i] = cdnt[i][1] * 500;
+    }
+
+
+    QLabel l;
+    QPicture pi;
+   // QPainter p(&pi);
+    QPixmap pix(500, 500);
+    QPainter p(&pix);
+
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setPen(QPen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap));
+    //pix.fill(Qt::transparent);
+
+    //p.begin(&pix);
+
+    for (int i = 0; i < 9; i++ )
+    {
+       p.drawLine(px[i],py[i],px[i+1],py[i+1]);
     }
 
     string bmpName = "wormNo.";
@@ -241,7 +290,7 @@ void createBmp(int num)
     // l.show();
 }
 
-
+*/
 int main(int argc, char *argv[])
 {
        readPvd("/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd");
@@ -249,17 +298,9 @@ int main(int argc, char *argv[])
 
        QApplication a(argc, argv);
 
-       /*
-       int px[10];
-       int py[10];
-       for (int i = 0; i < 10; i++)
-       {
-           px[i] = cdnt[i][0] * 500;
-           py[i] = cdnt[i][1] * 500;
-       }
-*/
 
-/*
+
+
        string file="/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
            string vtuFile[fileCounter];
            //vector<string> vtuFile(fileCounter);
@@ -290,56 +331,17 @@ int main(int argc, char *argv[])
                }
            }
 
-*/
-/*
-       qDebug()<<n;
-
-       QLabel l;
-       QPicture pi;
-      // QPainter p(&pi);
-       QPixmap pix(500, 500);
-       QPainter p(&pix);
-
-       for (int i = 0; i < n; i++ )
-       {
-          readCdnt(vtuFile[i]);
-
-          QPixmapCache::clear();
-
-
-          //pix.fill(Qt::transparent);
-
-          //p.begin(&pix);
-          for(int j = 0 ; j < 9; j++)
-          {
-              p.setRenderHint(QPainter::Antialiasing);
-              p.setPen(QPen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap));
-              p.drawLine(px[j],py[j],px[j+1],py[j+1]);
-
-          }
-          string bmpName = "wormNo.";
-          string bmpFormat = ".bmp";
-          ostringstream ss;
-
-          ss<<bmpName<<n<<bmpFormat;
-          QString qbmpName=QString::fromStdString(ss.str());
-          pix.save(qbmpName);
-          p.end();
-
-       }
+           for (int i = 0; i < n; i++)
+               {
+                   //cout<<vtuFile[i]<<endl;
+                   createBmp(vtuFile[i]);
+               }
 
 
 
 
 
-       // l.setPicture(pi);
-       // l.show();
 
-*/
-       for(int cc= 0 ; cc < 1213; cc++)
-       {
-           createBmp(cc);
-       }
 
    return a.exec();
 }
