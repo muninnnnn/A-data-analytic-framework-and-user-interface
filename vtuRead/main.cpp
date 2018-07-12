@@ -108,11 +108,17 @@ void readCdnt(string file)
     cout<<"The file name is: "<<file<<endl;
     string line;
 	ifstream infile;
+
+	ofstream outfile;
+
 	stringstream numTrans;
 	int numOfPoints;
-	int n = 0;
+	int nn = 0;
 
 	infile.open(file.data());
+
+	outfile.open("/home/csunix/sc17dh/Project/saveCdnt.txt",ios::app);
+
 	if (!infile.is_open())
 	{
 		cout << "Error,no such file\n";
@@ -149,7 +155,6 @@ void readCdnt(string file)
     }
 
     cout<<endl;
-    cout<<endl;
 
     float cdnt[numOfPoints][2];
 
@@ -162,22 +167,30 @@ void readCdnt(string file)
 		float first_num, second_num, third_num;
 		sscanf(line.c_str(), "%f %f %d", &first_num, &second_num, &third_num);
 		//cout << first_num << " " << second_num << " " << third_num << endl;
-		cdnt[n][0] = first_num;
-		cdnt[n][1] = second_num;
+		cdnt[nn][0] = first_num;
+		cdnt[nn][1] = second_num;
 		vec_num.push_back(first_num);
-		n++;
+		nn++;
 
-		if(n >= numOfPoints)
+
+
+		if(nn >= numOfPoints)
             break;
 	}
 
 	for (int i = 0; i < numOfPoints; i++)
 	{
+
+	    outfile << cdnt[i][0] << " " << cdnt[i][1] << endl;
 		cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
+
+
 	}
 	cout<<endl;
 
 	infile.close();
+
+	outfile.close();
 }
 
 
@@ -233,7 +246,7 @@ int main()
     for (int i = 0; i < n; i++)
     {
         cout<<vtuFile[i]<<endl;
-        readCdnt(vtuFile[i]);
+        readCdnt(vtuFile[0]);
     }
 
 

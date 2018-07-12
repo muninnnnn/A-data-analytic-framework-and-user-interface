@@ -291,26 +291,29 @@ int main(int argc, char *argv[])
 
            }
 
-       QLabel l;
-       QPicture pi;
-      // QPainter p(&pi);
-       QPixmap pix(500, 500);
-       QPainter p(&pix);
 
-       p.setRenderHint(QPainter::Antialiasing);
-       p.setPen(QPen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap));
-       //pix.fill(Qt::transparent);
-
-       //p.begin(&pix);
 
 
        qDebug()<<n;
        for (int i = 0; i < n; i++ )
        {
           readCdnt(vtuFile[i]);
+          QLabel l;
+          QPicture pi;
+         // QPainter p(&pi);
+          QPixmap pix(500, 500);
+          QPainter p(&pix);
+
+          p.setRenderHint(QPainter::Antialiasing);
+          p.setPen(QPen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap));
+          //pix.fill(Qt::transparent);
+
+          //p.begin(&pix);
           for(int i = 0 ; i < 9; i++)
           {
-          p.drawLine(px[i],py[i],px[i+1],py[i+1]);
+
+              p.drawLine(px[i],py[i],px[i+1],py[i+1]);
+
           }
           string bmpName = "wormNo.";
           string bmpFormat = ".bmp";
@@ -319,10 +322,10 @@ int main(int argc, char *argv[])
           ss<<bmpName<<n<<bmpFormat;
           QString qbmpName=QString::fromStdString(ss.str());
           pix.save(qbmpName);
-
+          p.end();
 
        }
-       p.end();
+
 
 
 
