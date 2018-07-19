@@ -115,6 +115,12 @@ void readCdnt(string file)
 	int numOfPoints;
 	int nn = 0;
 
+    float x_max = 0.0;
+    float x_min = 0.0;
+    float y_max = 0.0;
+    float y_min = 0.0;
+
+
 
 
 	infile.open(file.data());
@@ -175,8 +181,25 @@ void readCdnt(string file)
 		cdnt[nn][1] = second_num;
 		vec_num.push_back(first_num);
 		nn++;
+/*
+		if(cdnt[nn][0] > x_max)
+            {
+                x_max = cdnt[nn][0];
+            }
+        if(cdnt[nn][0] < x_min)
+            {
+                x_min = cdnt[nn][0];
+            }
+        if(cdnt[nn][1] > y_max)
+            {
+                y_max = cdnt[nn][1];
+            }
+        if(cdnt[nn][0] < y_min)
+            {
+                y_min = cdnt[nn][1];
+            }
 
-
+*/
 
 		if(nn >= numOfPoints)
             break;
@@ -187,10 +210,15 @@ void readCdnt(string file)
 	for (int i = 0; i < numOfPoints; i++)
 	{
 	    outfile << cdnt[i][0] << " " << cdnt[i][1] << endl;
-		cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
+		//cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
 	}
 	outfile << endl;
 	cout<<endl;
+
+	cout<<"The max x is :"<<x_max<<endl;
+    cout<<"The min x is :"<<x_min<<endl;
+    cout<<"The max y is :"<<y_max<<endl;
+    cout<<"The min y is :"<<x_min<<endl;
 
 	infile.close();
 
@@ -255,9 +283,11 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        cout<<vtuFile[i]<<endl;
+        //cout<<vtuFile[i]<<endl;
         readCdnt(vtuFile[i]);
     }
+
+    cout<<"File num is:"<<fileCounter<<endl;
 
 
 
