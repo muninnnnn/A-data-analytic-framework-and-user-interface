@@ -6,11 +6,16 @@ Update-Upload more sample VTU files which contains more than 10 points</br></br>
 Update-vtuRead can access the pvd file/update the way drawline uses</br></br>
 Update-vtuRead can loop through the pvd file and read the filename to get the coordinates in each file/Still have trouble in creating bitmaps because QPainter will only use one single bmp to save the shape of worms.</br></br>
 Update-Optimise the vtuRead and drawLines.Can read the Index(.pvd)to save all the data and create the bitmaps.</br></br>
+Update-Optimize the problem of array/vector.</br></br>
+Update-Propose one solution to the bmps and use ffmpeg to create a movie.</br></br>
+Update-Finish the job in solution. Fully understand the meaning of transforming the coordinates from worm_world into .bmp.</br></br>
+Still some problems to solve:</br></br>
+How to save the first data into x/y_max/min.</br>
+Optimisation of the function.</br></br></br>
 
-Will focus on the picture ---> movie format.</br></br>
+Final update on Project-Windows, something wrong on Linux.</br></br>
 
-</br>
-12/07  Dongye Hui
+19/07 Dongye Hui
 
 
 

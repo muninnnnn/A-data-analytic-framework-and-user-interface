@@ -123,11 +123,12 @@ void compare_size(string file)
 		    y_max = y_min =second_num;
 
 		}
-
+/*
 		x_max = max(first_num, x_max);
 		x_min = min(first_num, x_min);
 		y_max = max(second_num, y_max);
 		y_min = min(second_num, y_min);
+		*/
 		vec_num.push_back(first_num);
 		num_flag++;
 
@@ -140,7 +141,7 @@ void compare_size(string file)
 
 void readCdnt(string file)
 {
-    cout<<"The file name is: "<<file<<endl;
+    //cout<<"The file name is: "<<file<<endl;
     string line;
 	ifstream infile;
 
@@ -181,7 +182,7 @@ void readCdnt(string file)
 
             //cout<<"location1 is: "<<location1<<endl;
             //cout<<"location2 is: "<<location2<<endl;
-            cout<<"Number of Points is: "<<numOfPoints<<endl;
+            //cout<<"Number of Points is: "<<numOfPoints<<endl;
 
 
         }
@@ -245,6 +246,7 @@ void readCdnt(string file)
      //cout<<"THe centre of y is "<<y_centre<<endl;
 
     float size_scale = 480/size_wormworld;
+    //cout<<"Scale size"<<size_scale<<endl;
 
     int x_move = 250-(size_scale * x_centre);
     int y_move = 250-(size_scale * y_centre);
@@ -258,11 +260,11 @@ void readCdnt(string file)
     for(int i = 0; i < numOfPoints; i++)
     {
         pixel_coordinate_x[i] = cdnt[i][0] * size_scale + x_move;
-        pixel_coordinate_y[i] = cdnt[i][0] * size_scale + y_move;
+        pixel_coordinate_y[i] = cdnt[i][1] * size_scale + y_move;
 
-        cout<<"The x is:"<<pixel_coordinate_x[i]<<endl;
-        cout<<"The y is:"<<pixel_coordinate_y[i]<<endl;
-        cout<<endl;
+       // cout<<"The x is:"<<pixel_coordinate_x[i]<<endl;
+       // cout<<"The y is:"<<pixel_coordinate_y[i]<<endl;
+       // cout<<endl;
     }
 
 
@@ -332,6 +334,11 @@ int main()
     }
 
     //cout<<"File num is:"<<fileCounter<<endl;
+
+    cout<<"The max x is "<<x_max<<endl;
+    cout<<"The min x is "<<x_min<<endl;
+    cout<<"The max y is "<<y_max<<endl;
+    cout<<"The min y is "<<y_min<<endl;
 
 
 
