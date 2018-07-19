@@ -14,6 +14,8 @@ using namespace std;
 vector<float> vec_num;
 int fileCounter = 0;
 
+float x_max,x_min,y_max,y_min;
+
 void readTxt(string file)
 {
 	ifstream infile;
@@ -67,7 +69,7 @@ void readPvd(string file)
 
 void readCdnt(string file)
 {
-    cout<<"The file name is: "<<file<<endl;
+    //cout<<"The file name is: "<<file<<endl;
     string line;
 	ifstream infile;
 
@@ -108,7 +110,7 @@ void readCdnt(string file)
 
             //cout<<"location1 is: "<<location1<<endl;
             //cout<<"location2 is: "<<location2<<endl;
-            cout<<"Number of Points is: "<<numOfPoints<<endl;
+            //cout<<"Number of Points is: "<<numOfPoints<<endl;
 
 
         }
@@ -119,7 +121,7 @@ void readCdnt(string file)
 
     }
 
-    cout<<endl;
+    //cout<<endl;
 
     //float cdnt[numOfPoints][2];
 
@@ -137,12 +139,27 @@ void readCdnt(string file)
 		//cout << first_num << " " << second_num << " " << third_num << endl;
 		cdnt[num_flag][0] = first_num;
 		cdnt[num_flag][1] = second_num;
+
+		if (num_flag == 0)
+		{
+		    x_max = x_min =first_num;
+		    y_max = y_min =second_num;
+
+		}
+
+		x_max = max(first_num, x_max);
+		x_min = min(first_num, x_min);
+		y_max = max(second_num, y_max);
+		y_min = min(second_num, y_min);
+
 		vec_num.push_back(first_num);
 		num_flag++;
 
 
 		if(num_flag >= numOfPoints)
             break;
+
+
 	}
 
     outfile << "The file name is: "<<file<<endl<<"Number of Points is: "<<numOfPoints<<endl;
@@ -150,7 +167,7 @@ void readCdnt(string file)
 	for (int i = 0; i < numOfPoints; i++)
 	{
 	    outfile << cdnt[i][0] << " " << cdnt[i][1] << endl;
-		cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
+		//cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
 	}
 	outfile << endl;
 
@@ -211,8 +228,11 @@ int main()
         readCdnt(vtuFile[i]);
     }
 
-    cout<<"File num is:"<<fileCounter<<endl;
-
+    //cout<<"File num is:"<<fileCounter<<endl;
+     cout<<"The x max is "<<x_max<<endl;
+     cout<<"The x min is "<<x_min<<endl;
+     cout<<"The y max is "<<y_max<<endl;
+     cout<<"The y min is "<<y_min<<endl;
 
 
 
