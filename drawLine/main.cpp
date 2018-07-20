@@ -142,7 +142,7 @@ void findMax(string file)
 
 void createBmp_1(string file)
 {
-    cout<<"The file name is: "<<file<<endl;
+    cout<<"The file name is: "<< file<<endl;
     string line;
     ifstream infile;
     stringstream numTrans;

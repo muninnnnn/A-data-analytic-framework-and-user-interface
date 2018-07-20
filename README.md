@@ -9,13 +9,17 @@ Update-Optimise the vtuRead and drawLines.Can read the Index(.pvd)to save all th
 Update-Optimize the problem of array/vector.</br></br>
 Update-Propose one solution to the bmps and use ffmpeg to create a movie.</br></br>
 Update-Finish the job in solution. Fully understand the meaning of transforming the coordinates from worm_world into .bmp.</br></br>
-Still some problems to solve:</br></br>
-How to save the first data into x/y_max/min.</br>
-Optimisation of the function.</br></br></br>
 
-Final update on Project-Windows, something wrong on Linux.</br></br>
+First update on Project-Windows, something wrong on Linux.</br></br>
 
-19/07 Dongye Hui
+Update-Finish problems in Solution_1 (the issue of init_flag)</br></br>
+
+Problems in : qDebug()</br></br>
+
+Work on implement on QT, considering about OpenCV
+ 
+
+20/07 Dongye Hui
 
 
 
