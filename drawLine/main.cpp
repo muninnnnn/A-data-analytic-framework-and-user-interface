@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <cmath>
 
+
+
 using namespace std;
 vector<float> vec_num;
 int fileCounter = 0;
@@ -292,7 +294,7 @@ void createBmp_1(string file)
        p.drawLine(pixel_coordinate_x[i],pixel_coordinate_y[i],pixel_coordinate_x[i+1],pixel_coordinate_y[i+1]);
     }
 
-    string bmpName = "wormNo.";
+    string bmpName = "Image";
     string bmpFormat = ".bmp";
     ostringstream ss;
 
@@ -457,7 +459,7 @@ void createBmp_2(string file)
 int main(int argc, char *argv[])
 {
 
-    string file="/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
+    string file="/home/csunix/sc17dh/Project/sampeVTUs/worm.pvd";
     readPvd(file);
 
     QApplication a(argc, argv);
@@ -483,7 +485,7 @@ int main(int argc, char *argv[])
                {
                    int location = line.find(s1);
                    location = location + 6;
-                   vtuFile[n] = "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location,15);
+                   vtuFile[n] = "/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
                    //cout<<vtuFile[n]<<endl;
                    n++;
 
