@@ -14,12 +14,20 @@ First update on Project-Windows, something wrong on Linux.</br></br>
 
 Update-Finish problems in Solution_1 (the issue of init_flag)</br></br>
 
-Problems in : qDebug()</br></br>
+Update-Finally fix the problem about qDebug() (issue with QString <-->String)</br></br>
 
-Work on implement on QT, considering about OpenCV
+Update-Install OpenCV</br></br>
+
+Update-Considering about 3D</br></br>
+
+Work on implement on QT (Problem!!!)</br></br>
+
+Worte Summary Report, essay</br></br>
+
+
  
 
-20/07 Dongye Hui
+24/07 Dongye Hui
 
 
 
