@@ -26,6 +26,12 @@ int numOfPoints = 0;
 int init_flag = 0;
 
 float x_max, x_min, y_max, y_min;
+float speed;
+
+vector<vector<float> >cdnt;
+
+pair<int,int>pixel_coordinate;
+pair<float,float> CoM;
 
 void readTxt(string file)
 {
@@ -132,7 +138,7 @@ void findMax(string file)
  }
 }
 
-void readCDNT(string file, vector<vector<float> >cdnt)
+void readCDNT(string file)
 {
     //cout<<"The file name is: "<<file<<endl;
     string line;
@@ -176,7 +182,7 @@ void readCDNT(string file, vector<vector<float> >cdnt)
 }
 
 
-void calculateCoordinate(pair<int,int>pixel_coordinate, float wx, float wy, float xmax, float xmin, float ymax, float ymin, int res, int margin)
+void calculateCoordinate(float wx, float wy, float xmax, float xmin, float ymax, float ymin, int res, int margin)
 {
     float x_width = xmax - xmin;
     float y_width = ymax - ymin;
@@ -192,12 +198,50 @@ void calculateCoordinate(pair<int,int>pixel_coordinate, float wx, float wy, floa
 
 }
 
-void createBMP(double a, double b, double c, double d)
+void calculateCoM(vector<vector <float> >wormworld_cdnt)
+{
+    float x_sum = 0.0;
+    float y_sum = 0.0;
+
+    for (int i = 0; i < numOfPoints;i++)
+    {
+        x_sum+=wormworld_cdnt[i][0];
+        y_sum+=wormworld_cdnt[i][1];
+    }
+
+    CoM = make_pair(x_sum/numOfPoints,y_sum/numOfPoints);
+
+}
+
+
+float calculateDistance(float x1, float y1, float x2, float y2)
+{
+    return sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1-y2));
+}
+
+float calculateSpeed(pair<float,float>CoM1,pair<float,float>CoM2,float T1 = 0.0, float T2 = 5.0)
+{
+    float distance;
+    if(CoM1.first > CoM2.first)
+    {
+        distance = 0 - calculateDistance(CoM1.first, CoM1.second, CoM2.first, CoM2.second);
+    }
+    else
+    {
+        distance = calculateDistance(CoM1.first, CoM1.second, CoM2.first, CoM2.second);
+    }
+
+    return distance/(T2-T1);
+
+}
+
+
+void createBMP(vector<vector<int> >pixel_cdnt, int res)
 {
     QLabel l;
     QPicture pi;
    // QPainter p(&pi);
-    QPixmap pix(500,500);
+    QPixmap pix(res,res);
     QPainter p(&pix);
     QFont font = p.font();
 
@@ -208,25 +252,32 @@ void createBMP(double a, double b, double c, double d)
 
     pix.fill(Qt::white);
 
-    p.drawText(350,50,"Hello World!");
+    string speedTxt = "The speed is :";
+    ostringstream ss_1;
+    ss_1<<speedTxt<<speed;
+    QString bmpSpeedTxt = QString::fromStdString(ss_1.str()) ;
+
+    p.drawText(300,50,bmpSpeedTxt);
 
     //p.begin(&pix);
 
     for (int i = 0; i < numOfPoints - 1; i++ )
     {
-       p.drawLine(a,b,c,d);
+       p.drawLine(pixel_cdnt[i][0],pixel_cdnt[i][1],pixel_cdnt[i+1][0],pixel_cdnt[i+1][1]);
     }
 
     string bmpName = "Image";
     string bmpFormat = ".bmp";
-    ostringstream ss;
+    ostringstream ss_2;
 
-    ss<<bmpName<<global_num+1<<bmpFormat;
+    ss_2<<bmpName<<global_num+1<<bmpFormat;
     global_num++;
 
-    QString qbmpName=QString::fromStdString(ss.str());
+    QString qbmpName=QString::fromStdString(ss_2.str());
     pix.save(qbmpName);
     p.end();
+
+    cout<<"Finish no."<<global_num-1<<endl;
 
 }
 
@@ -267,44 +318,69 @@ int main(int argc, char *argv[])
                }
            }
 
-
-
-
-
-           for (int i = 0; i < n; i++)
+           for (int i = 0; i < n; i++) //Find max/min, read numOfPoints
            {
                findMax(vtuFile[i]);
            }
-       //cout<<"NUM OF POINT IS "<<numOfPoints<<endl;
 
-      vector<vector<float> >cdnts;
-      pair<int,int>p_coordinate;
+           for (int i = 0; i < numOfPoints; i++)
+           {
+               cdnt.push_back(vector<float>(2));
+           }
+
+
+
       float wx,wy;
 
-      for (int i = 0; i < numOfPoints; i++)
+      vector<vector <int> > bmp_point;
+      for(int i = 0; i < numOfPoints; i++)
       {
-          cdnts.push_back(vector<float>(2));
+          bmp_point.push_back(vector<int>(2));
       }
 
-      for (int i = 0; i < n; i++)
+
+     pair<float,float> CoM1;
+     pair<float,float> CoM2;
+
+      for (int i = 0; i < n; i++) //Compute Speed to create bitmap
       {
-          readCDNT(vtuFile[i], cdnts);
-          cout<<cdnts[0][0]<<endl;
+          readCDNT(vtuFile[i]);
 
-/*
-          for (int j = 0; j < numOfPoints; j++)
+          if(i == 0)
           {
-              //wx = cdnt[j][0];
-              //wy = cdnt[j][1];
-              //cout<<cdnt[j][0]<<"  "<<cdnt[j][1];
-             calculateCoordinate(p_coordinate,0.2,0.8,x_max,x_min,y_max,y_min,500,20);
-             cout<<p_coordinate.first<<"     "<<p_coordinate.second<<endl;
-
+              calculateCoM(cdnt);
+              CoM1 = CoM;
           }
 
-          cout<<endl;
+          if(i == n-1)
+          {
+              calculateCoM(cdnt);
+              CoM2 = CoM;
+          }
+
+          speed = calculateSpeed(CoM1,CoM2);
+
       }
-*/
+
+
+      for (int i = 0; i < n; i++)             //Create the Bmp
+      {
+          readCDNT(vtuFile[i]);
+          for (int j = 0; j < numOfPoints; j++)
+          {
+              wx = cdnt[j][0];
+              wy = cdnt[j][1];
+
+             calculateCoordinate(wx,wy,x_max,x_min,y_max,y_min,500,20);
+             bmp_point[j][0] = pixel_coordinate.first;
+             bmp_point[j][1] = pixel_coordinate.second;
+          }
+          createBMP(bmp_point,500);
+      }
+
+
+
+
 return 0;
 
    return a.exec();
