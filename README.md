@@ -20,6 +20,10 @@ Update-Install OpenCV</br></br>
 
 Update-Considering about 3D</br></br>
 
+Update-Fixing the function but still some little problems.(Not change that in solution1/2.pro)</br></br>
+
+Update-Do literature research.</br></br>
+
 Work on implement on QT (Problem!!!)</br></br>
 
 Worte Summary Report, essay</br></br>
@@ -27,7 +31,7 @@ Worte Summary Report, essay</br></br>
 
  
 
-24/07 Dongye Hui
+26/07 Dongye Hui
 
 
 
