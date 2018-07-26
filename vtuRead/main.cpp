@@ -13,6 +13,10 @@
 using namespace std;
 vector<float> vec_num;
 int fileCounter = 0;
+float cx1,cx2,cy1,cy2;
+
+int flagg=0;
+
 
 float x_max,x_min,y_max,y_min;
 
@@ -154,7 +158,7 @@ void readCdnt(string file)
 
 	infile.open(file.data());
 
-	outfile.open("/home/csunix/sc17dh/Project/saveCdnt.txt",ios::app);
+	//outfile.open("/home/csunix/sc17dh/Project/saveCdnt.txt",ios::app);
 
 	if (!infile.is_open())
 	{
@@ -179,11 +183,6 @@ void readCdnt(string file)
 
             numTrans << line.substr(location1,location);
             numTrans >> numOfPoints;
-
-            //cout<<"location1 is: "<<location1<<endl;
-            //cout<<"location2 is: "<<location2<<endl;
-            //cout<<"Number of Points is: "<<numOfPoints<<endl;
-
 
         }
 
@@ -220,14 +219,14 @@ void readCdnt(string file)
 	}
 
 
-    outfile << "The file name is: "<<file<<endl<<"Number of Points is: "<<numOfPoints<<endl;
+   // outfile << "The file name is: "<<file<<endl<<"Number of Points is: "<<numOfPoints<<endl;
 
 	for (int i = 0; i < numOfPoints; i++)
 	{
 	    outfile << cdnt[i][0] << " " << cdnt[i][1] << endl;
 		//cout << cdnt[i][0] << " " << cdnt[i][1] << endl;
 	}
-	outfile << endl;
+	//outfile << endl;
 
 	 float x_width = x_max - x_min;
      float y_width = y_max - y_min;
@@ -267,20 +266,53 @@ void readCdnt(string file)
        // cout<<endl;
     }
 
+    pair<float,float> Com;
+    float sumx = 0.0;
+    float sumy = 0.0;
+
+    for(int i = 0; i < numOfPoints; i++)
+    {
+        sumx+=cdnt[i][0];
+        sumy+=cdnt[i][1];
+
+    }
+    Com = make_pair(sumx/numOfPoints,sumy/numOfPoints);
+
+    if(flagg ==0)
+    {
+        cx1 = Com.first;
+        cy1 = Com.second;
+    }
+
+    if(flagg == 999)
+    {
+        cx2 = Com.first;
+        cy2 = Com.second;
+
+    }
+    flagg++;
+
+    //cout<<"Centre of Mass "<<Com.first<<"  "<<Com.second<<endl;
+
+
 
 
 	infile.close();
 
-	outfile.close();
+	//outfile.close();
 }
 
+float distance(float a, float b, float c, float d)
+{
 
+    return sqrt((a-c)*(a-c)+(b-d)*(b-d));
+}
 
 
 int main()
 {
 
-    string file="/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
+    string file="/home/csunix/sc17dh/Project/sampeVTUs/worm.pvd";
     readPvd(file);
 
     vector<string> vtuFile(fileCounter);
@@ -311,7 +343,7 @@ int main()
         {
             int location = line.find(s1);
             location = location + 6;
-            vtuFile[n] = "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location,15);
+            vtuFile[n] = "/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
             //vtuFile.push_back(line.substr(location,15));
             n++;
         }
@@ -333,12 +365,15 @@ int main()
         readCdnt(vtuFile[i]);
     }
 
-    //cout<<"File num is:"<<fileCounter<<endl;
+    //cout<<cx1<<"  "<<cy1<<endl;
+    //cout<<cx2<<"  "<<cy2<<endl;
 
-    cout<<"The max x is "<<x_max<<endl;
-    cout<<"The min x is "<<x_min<<endl;
-    cout<<"The max y is "<<y_max<<endl;
-    cout<<"The min y is "<<y_min<<endl;
+    float d = distance(cx1,cy1,cx2,cy2);
+    float sp = d/5;
+
+    cout<<sp<<endl;
+
+    //cout<<"File num is:"<<fileCounter<<endl;
 
 
 
