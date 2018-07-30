@@ -26,12 +26,12 @@ Update-Do literature research.</br></br>
 
 Work on implement on QT (Problem!!!)</br></br>
 
-Worte Summary Report, essay</br></br>
+Worte essay</br></br>
 
 
  
 
-26/07 Dongye Hui
+30/07 Dongye Hui
 
 
 
