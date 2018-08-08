@@ -24,14 +24,17 @@ Update-Fixing the function but still some little problems.(Not change that in so
 
 Update-Do literature research.</br></br>
 
+Update-Two matrics-Frequency & Wavelength</br></br>
+
 Work on implement on QT (Problem!!!)</br></br>
 
-Worte essay</br></br>
+
+Worte essay - Chapter 2</br></br>
 
 
  
 
-30/07 Dongye Hui
+08/08 Dongye Hui
 
 
 
