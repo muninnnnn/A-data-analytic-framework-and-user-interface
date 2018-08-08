@@ -8,14 +8,16 @@
 #include <stdio.h>
 #include <cmath>
 #include <vector>
+#include <stdlib.h>
 
 
 using namespace std;
-vector<float> vec_num;
+vector<float> vtuTime;
 int fileCounter = 0;
 float cx1,cx2,cy1,cy2;
 
 int flagg=0;
+
 
 
 float x_max,x_min,y_max,y_min;
@@ -42,6 +44,9 @@ void readPvd(string file)
 {
     string line;
 	ifstream infile;
+    stringstream numTrans;
+    int timeflag = 0;
+    float zi;
 
 	infile.open(file.data());
 
@@ -51,18 +56,37 @@ void readPvd(string file)
 	}
 
     string s1 = "file=\"";
-    string filename;
+    string s2 = "DataSet timestep";
+    string s3 = "\"";
+
     while(getline(infile,line))
     {
         if (line.find(s1) != string::npos)
         {
-            //int location = line.find(s1);
-            //location = location + 6;
-            //filename = line.substr(location,15);
+
             fileCounter++;
-            //cout<<filename<<endl;
+
         }
+        if (line.find(s2) != string::npos)
+        {
+            int location1 = line.find(s2) + 18;
+            int location2 = line.find(s3,location1);
+            int location = location2-location1;
+
+            string tt = line.substr(location1,location);
+            zi = atof(tt.c_str());
+
+         //   numTrans>>zi;
+           //cout<<zi<<endl;
+            vtuTime.push_back(zi);
+            //vtuTime.push_back(z);
+
+        }
+
     }
+
+
+
     infile.close();
 
     //cout<<fileCounter<<endl;
@@ -133,7 +157,7 @@ void compare_size(string file)
 		y_max = max(second_num, y_max);
 		y_min = min(second_num, y_min);
 		*/
-		vec_num.push_back(first_num);
+
 		num_flag++;
 
 		if(num_flag >= numOfPoints)
@@ -210,7 +234,7 @@ void readCdnt(string file)
 		//cout << first_num << " " << second_num << " " << third_num << endl;
 		cdnt[num_flag][0] = first_num;
 		cdnt[num_flag][1] = second_num;
-		vec_num.push_back(first_num);
+
 		num_flag++;
 
 		if(num_flag >= numOfPoints)
@@ -389,7 +413,11 @@ int main()
 
     }
 
-    readCurve(vtuFile[1]);
+    for (int i = 0; i < fileCounter; i++)
+    {
+        cout<<vtuTime[i]<<endl;
+    }
+
 
     cout<<"The number of files is :"<<n<<endl;
 
