@@ -88,8 +88,8 @@ void readPvd(string file)
         {
             int location_name = line.find(s1);
             location_name = location_name + 6;
-            //filename="/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
-            filename= "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location_name,15);
+            filename="/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location_name,15);
+            //filename= "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location_name,15);
             vtuFile.push_back(filename);
             fileCounter++;
         }        
@@ -421,8 +421,8 @@ void createBMP(vector<vector<int> >pixel_cdnt, int res)
 int main(int argc, char *argv[])
 {
 
-    //string file="/home/csunix/sc17dh/Project/sampeVTUs/worm.pvd";
-    string file="/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
+    string file="/home/csunix/sc17dh/Project/sampeVTUs/worm.pvd";
+    //string file="/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
     readPvd(file);
 
     QApplication a(argc, argv);
