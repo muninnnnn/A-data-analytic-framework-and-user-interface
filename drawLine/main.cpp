@@ -138,6 +138,49 @@ void findMax(string file)
  }
 }
 
+
+void readCurve(string file)
+{
+    string line;
+    ifstream infile;
+    stringstream numTrans;
+
+
+    infile.open(file.data());
+
+    if (!infile.is_open())
+    {
+        cout << "Error,no such file\n";
+    }
+
+    string s = "<DataArray type=\"Float32\" Name=\"P\" NumberOfComponents=\"1\">";
+
+    while(getline(infile,line))
+    {
+        if (line.find(s) != string::npos)
+            break;
+    }
+
+    while (getline(infile,line))
+    {
+        int curflag = 0;
+        vector<float> vec(numOfPoints-1);
+        stringstream curve_read;
+        float x;
+        while(curve_read >> x)
+        {
+            vec[curflag++] = x;
+        }
+        for (int i = 0; i< numOfPoints -1; i++)
+        {
+            cout<<vec[i]<<"  ";
+        }
+        cout<<endl;
+    }
+
+}
+
+
 void readCDNT(string file)
 {
     //cout<<"The file name is: "<<file<<endl;
@@ -277,7 +320,7 @@ void createBMP(vector<vector<int> >pixel_cdnt, int res)
     pix.save(qbmpName);
     p.end();
 
-    cout<<"Finish no."<<global_num-1<<endl;
+    //cout<<"Finish no."<<global_num-1<<endl;
 
 }
 
@@ -285,7 +328,8 @@ void createBMP(vector<vector<int> >pixel_cdnt, int res)
 int main(int argc, char *argv[])
 {
 
-    string file="/home/csunix/sc17dh/Project/sampeVTUs/worm.pvd";
+    //string file="/home/csunix/sc17dh/Project/sampeVTUs/worm.pvd";
+    string file="/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
     readPvd(file);
 
     QApplication a(argc, argv);
@@ -311,7 +355,8 @@ int main(int argc, char *argv[])
                {
                    int location = line.find(s1);
                    location = location + 6;
-                   vtuFile[n] = "/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
+                   //vtuFile[n] = "/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
+                   vtuFile[n] = "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location,15);
                    //cout<<vtuFile[n]<<endl;
                    n++;
 
@@ -328,7 +373,7 @@ int main(int argc, char *argv[])
                cdnt.push_back(vector<float>(2));
            }
 
-
+/*
 
       float wx,wy;
 
@@ -362,9 +407,12 @@ int main(int argc, char *argv[])
 
       }
 
+      */
 
       for (int i = 0; i < n; i++)             //Create the Bmp
       {
+          readCurve(vtuFile[i]);
+          /*
           readCDNT(vtuFile[i]);
           for (int j = 0; j < numOfPoints; j++)
           {
@@ -376,6 +424,7 @@ int main(int argc, char *argv[])
              bmp_point[j][1] = pixel_coordinate.second;
           }
           createBMP(bmp_point,500);
+          */
       }
 
 
