@@ -309,10 +309,54 @@ float distance(float a, float b, float c, float d)
 }
 
 
+void readCurve(string file)
+{
+    string line;
+    ifstream infile;
+    stringstream numTrans;
+
+
+    infile.open(file.data());
+
+    if (!infile.is_open())
+    {
+        cout << "Error,no such file\n";
+    }
+
+    string s = "<DataArray type=\"Float32\" Name=\"P\" NumberOfComponents=\"1\">";
+
+    while(getline(infile,line))
+    {
+        if (line.find(s) != string::npos)
+            break;
+    }
+
+   getline(infile,line);
+        int curflag = 0;
+        vector<float> vec (9);
+        stringstream curve_read(line);
+        float x;
+
+        int y = 0;
+
+        while(curve_read >> x)
+        {
+            vec[y]=x;
+            y++;
+        }
+        for (int i = 0; i < 9; i++)
+        {
+            cout<<vec[i]<<"    ";
+        }
+
+}
+
+
+
 int main()
 {
 
-    string file="/home/csunix/sc17dh/Project/sampeVTUs/worm.pvd";
+    string file="/home/csunix/sc17dh/Project/example_meshpoints_10/worm.pvd";
     readPvd(file);
 
     vector<string> vtuFile(fileCounter);
@@ -320,11 +364,6 @@ int main()
     string line;
     string filename;
 	ifstream infile;
-
-	ofstream outfile;
-
-	outfile.open("/home/csunix/sc17dh/Project/saveCdnt.txt",ios::out);
-	outfile.close();
 
 	int n = 0;
 
@@ -343,41 +382,16 @@ int main()
         {
             int location = line.find(s1);
             location = location + 6;
-            vtuFile[n] = "/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
+            vtuFile[n] = "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location,15);
             //vtuFile.push_back(line.substr(location,15));
             n++;
         }
 
     }
 
+    readCurve(vtuFile[1]);
+
     cout<<"The number of files is :"<<n<<endl;
-
-
-    for (int i = 0; i < n; i++)
-    {
-        //cout<<vtuFile[i]<<endl;
-        compare_size(vtuFile[i]);
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-        //cout<<vtuFile[i]<<endl;
-        readCdnt(vtuFile[i]);
-    }
-
-    //cout<<cx1<<"  "<<cy1<<endl;
-    //cout<<cx2<<"  "<<cy2<<endl;
-
-    float d = distance(cx1,cy1,cx2,cy2);
-    float sp = d/5;
-
-    cout<<sp<<endl;
-
-    //cout<<"File num is:"<<fileCounter<<endl;
-
-
-
-
 
 
 
