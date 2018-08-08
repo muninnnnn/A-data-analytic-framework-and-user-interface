@@ -16,6 +16,7 @@
 #include <cassert>
 #include <stdio.h>
 #include <cmath>
+#include <stdlib.h>
 
 
 using namespace std;
@@ -25,10 +26,23 @@ int global_num = 0;
 int numOfPoints = 0;
 int init_flag = 0;
 
-float x_max, x_min, y_max, y_min;
-float speed;
 
-vector<vector<float> >cdnt;
+vector<string> vtuFile;
+
+
+vector<float> vtuTime;
+
+vector<vector<float> > cdnt;
+
+vector<float> mid_curve;
+int curve_flag = 0;
+
+float x_max, x_min, y_max, y_min;
+
+float speed;
+float frequency;
+
+
 
 pair<int,int>pixel_coordinate;
 pair<float,float> CoM;
@@ -53,6 +67,8 @@ void readPvd(string file)
 {
     string line;
     ifstream infile;
+    string filename;
+    float time_step;
 
     infile.open(file.data());
 
@@ -62,14 +78,34 @@ void readPvd(string file)
     }
 
     string s1 = "file=\"";
-    string filename;
+    string s2 = "DataSet timestep";
+    string s3 = "\"";
+
+
     while(getline(infile,line))
     {
         if (line.find(s1) != string::npos)
         {
+            int location_name = line.find(s1);
+            location_name = location_name + 6;
+            //filename="/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
+            filename= "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location_name,15);
+            vtuFile.push_back(filename);
             fileCounter++;
+        }        
+        if (line.find(s2) != string::npos)
+       {
+                   int location1 = line.find(s2) + 18;
+                   int location2 = line.find(s3,location1);
+                   int location_time = location2-location1;
+
+                   string stime = line.substr(location1,location_time);
+
+                   time_step = atof(stime.c_str());
+                   vtuTime.push_back(time_step);
         }
-    }
+     }
+
     infile.close();
 }
 
@@ -138,47 +174,6 @@ void findMax(string file)
  }
 }
 
-
-void readCurve(string file)
-{
-    string line;
-    ifstream infile;
-    stringstream numTrans;
-
-
-    infile.open(file.data());
-
-    if (!infile.is_open())
-    {
-        cout << "Error,no such file\n";
-    }
-
-    string s = "<DataArray type=\"Float32\" Name=\"P\" NumberOfComponents=\"1\">";
-
-    while(getline(infile,line))
-    {
-        if (line.find(s) != string::npos)
-            break;
-    }
-
-    while (getline(infile,line))
-    {
-        int curflag = 0;
-        vector<float> vec(numOfPoints-1);
-        stringstream curve_read;
-        float x;
-        while(curve_read >> x)
-        {
-            vec[curflag++] = x;
-        }
-        for (int i = 0; i< numOfPoints -1; i++)
-        {
-            cout<<vec[i]<<"  ";
-        }
-        cout<<endl;
-    }
-
-}
 
 
 void readCDNT(string file)
@@ -278,6 +273,100 @@ float calculateSpeed(pair<float,float>CoM1,pair<float,float>CoM2,float T1 = 0.0,
 
 }
 
+void readCurve(string file)
+{
+    string line;
+    ifstream infile;
+    int file_flag = 0;
+    int curve_flag = 0;
+    float temp_curve;
+    vector<float> curve;
+
+
+    infile.open(file.data());
+
+    if (!infile.is_open())
+    {
+        cout << "Error,no such file\n";
+    }
+
+    string s = "<DataArray type=\"Float32\" Name=\"P\" NumberOfComponents=\"1\">";
+
+    while(getline(infile,line))
+    {
+        if (line.find(s) != string::npos)
+            break;
+    }
+
+    getline(infile,line);
+    stringstream curve_read(line);
+
+              while(curve_read >> temp_curve)
+            {
+                curve.push_back(temp_curve);
+            }
+              int midpoint = (numOfPoints+1) / 2;
+              mid_curve.push_back(curve[midpoint]);
+}
+
+float calculateFrequency()
+{
+    vector<float> temp_curve;
+    vector<float> tempnext_curve;
+    for(int i = 0; i < fileCounter-1; i++)
+    {
+        temp_curve.push_back(mid_curve[i]);
+    }
+    for(int i = 1; i < fileCounter; i++)
+    {
+        tempnext_curve.push_back(mid_curve[i]);
+    }
+
+    vector<int> ind;
+
+    for (int i = 0; i < fileCounter -1; i++)
+    {
+        if((temp_curve[i]*tempnext_curve[i] < 0.0)&&(tempnext_curve[i] > 0.0))
+            ind.push_back(i);
+    }
+
+    vector<float> time_period;
+
+    for(int i = 0; i < ind.size();i++)
+    {
+        time_period.push_back(vtuTime[ind[i]]);
+    }
+
+    vector<float> time_diff;
+    for(int i = 0; i < time_period.size()-1; i++)
+    {
+        float diff_temp = time_period[i+1] = time_period[i];
+        time_diff.push_back(diff_temp);
+    }
+
+    int average_point = time_diff.size();
+    float sum = 0.0;
+    for(int i = 0; i < average_point; i++)
+    {
+        sum += time_diff[i];
+    }
+
+    float period = sum/average_point;
+
+
+    if(period == 0)
+    {
+        return 0.0;
+    }
+        else
+    {
+        return 1/period;
+    }
+
+
+
+}
+
 
 void createBMP(vector<vector<int> >pixel_cdnt, int res)
 {
@@ -296,11 +385,15 @@ void createBMP(vector<vector<int> >pixel_cdnt, int res)
     pix.fill(Qt::white);
 
     string speedTxt = "The speed is :";
+    string frequencyTxt = "The frequency is :";
     ostringstream ss_1;
+    ostringstream ss_2;
     ss_1<<speedTxt<<speed;
+    ss_2<<frequencyTxt<<frequency;
     QString bmpSpeedTxt = QString::fromStdString(ss_1.str()) ;
-
+    QString bmpFrequencyTxt = QString::fromStdString(ss_2.str());
     p.drawText(300,50,bmpSpeedTxt);
+    p.drawText(300,70,bmpFrequencyTxt);
 
     //p.begin(&pix);
 
@@ -311,16 +404,16 @@ void createBMP(vector<vector<int> >pixel_cdnt, int res)
 
     string bmpName = "Image";
     string bmpFormat = ".bmp";
-    ostringstream ss_2;
+    ostringstream ss_name;
 
-    ss_2<<bmpName<<global_num+1<<bmpFormat;
+    ss_name<<bmpName<<global_num+1<<bmpFormat;
     global_num++;
 
-    QString qbmpName=QString::fromStdString(ss_2.str());
+    QString qbmpName=QString::fromStdString(ss_name.str());
     pix.save(qbmpName);
     p.end();
 
-    //cout<<"Finish no."<<global_num-1<<endl;
+    cout<<"Finish no."<<global_num-1<<endl;
 
 }
 
@@ -334,36 +427,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    vector<string> vtuFile(fileCounter);
-    string line;
-    string filename;
-    ifstream infile;
-           int n = 0;
-
-           infile.open(file.data());
-
-           if (!infile.is_open())
-           {
-               cout << "Error,no such file\n";
-           }
-
-
-           string s1 = "file=\"";
-           while(getline(infile,line))
-           {
-               if (line.find(s1) != string::npos)
-               {
-                   int location = line.find(s1);
-                   location = location + 6;
-                   //vtuFile[n] = "/home/csunix/sc17dh/Project/sampeVTUs/"+line.substr(location,15);
-                   vtuFile[n] = "/home/csunix/sc17dh/Project/example_meshpoints_10/"+line.substr(location,15);
-                   //cout<<vtuFile[n]<<endl;
-                   n++;
-
-               }
-           }
-
-           for (int i = 0; i < n; i++) //Find max/min, read numOfPoints
+           for (int i = 0; i < fileCounter; i++) //Find max/min, read numOfPoints
            {
                findMax(vtuFile[i]);
            }
@@ -372,8 +436,6 @@ int main(int argc, char *argv[])
            {
                cdnt.push_back(vector<float>(2));
            }
-
-/*
 
       float wx,wy;
 
@@ -387,8 +449,10 @@ int main(int argc, char *argv[])
      pair<float,float> CoM1;
      pair<float,float> CoM2;
 
-      for (int i = 0; i < n; i++) //Compute Speed to create bitmap
+      for (int i = 0; i < fileCounter; i++) //Compute Speed to create bitmap
       {
+
+          readCurve(vtuFile[i]);
           readCDNT(vtuFile[i]);
 
           if(i == 0)
@@ -397,7 +461,7 @@ int main(int argc, char *argv[])
               CoM1 = CoM;
           }
 
-          if(i == n-1)
+          if(i == fileCounter-1)
           {
               calculateCoM(cdnt);
               CoM2 = CoM;
@@ -406,13 +470,14 @@ int main(int argc, char *argv[])
           speed = calculateSpeed(CoM1,CoM2);
 
       }
+          frequency = calculateFrequency();
 
-      */
 
-      for (int i = 0; i < n; i++)             //Create the Bmp
+
+      for (int i = 0; i < fileCounter; i++)             //Create the Bmp
       {
-          readCurve(vtuFile[i]);
-          /*
+          //readCurve(vtuFile[i]);
+
           readCDNT(vtuFile[i]);
           for (int j = 0; j < numOfPoints; j++)
           {
@@ -424,13 +489,10 @@ int main(int argc, char *argv[])
              bmp_point[j][1] = pixel_coordinate.second;
           }
           createBMP(bmp_point,500);
-          */
+
       }
 
-
-
-
-return 0;
+   return 0;
 
    return a.exec();
 }
